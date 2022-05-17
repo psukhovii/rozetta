@@ -1,0 +1,9 @@
+variable "alb_name" {}
+variable "alb_tg_name" {}
+variable "load_balancer_type" {}
+variable "security_group_ids" {}
+variable "public_subnet_ids" {}
+variable "vpc_id" {}
+variable "health_check_path" {}
+variable "tsl_certificate_arn" {}
+variable "tags" {}

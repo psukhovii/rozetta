@@ -1,0 +1,44 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "tf-rosetta-api-dev",
+            "image": "957998967403.dkr.ecr.us-east-1.amazonaws.com/tf-rosetta-api-dev:latest",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "LOG_LEVEL",
+                    "value": "DEBUG"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/tf-rosetta-api-task-dev",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "family": "tf-rosetta-api-task-dev",
+    "taskRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskRole-dev",
+    "executionRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskExecutionRole-dev",
+    "networkMode": "awsvpc",
+    "volumes": [],
+    "placementConstraints": [],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "2048"
+}
