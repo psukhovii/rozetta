@@ -18,13 +18,13 @@ resource "aws_alb_target_group" "main" {
   target_type = "ip"
 
   health_check {
-    healthy_threshold   = "3"
+    healthy_threshold   = "5"
     interval            = "30"
     protocol            = "HTTP"
-    matcher             = "200"
-    timeout             = "15"
+    matcher             = "404"
+    timeout             = "5"
     path                = var.health_check_path
-    unhealthy_threshold = "5"
+    unhealthy_threshold = "2"
   }
 
   tags = {
