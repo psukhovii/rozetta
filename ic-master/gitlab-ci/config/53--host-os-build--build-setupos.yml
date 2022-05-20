@@ -1,0 +1,32 @@
+setup-os-iso:
+  needs:
+    - job: guest-os-diskimg
+      artifacts: false
+    - job: host-os-diskimg
+      artifacts: false
+  extends:
+    - .ubuntu-nix-docker-protected
+    - .rules-parent-pipeline-autorun-on-trigger
+  stage: host-os-build
+  script:
+    - |
+      set -xeuo pipefail
+      VERSION=$(git rev-parse HEAD)
+      echo "Build ID: ${VERSION}"
+
+      # NOTE: This is currently hardcoded to a specific blessed version of guestOS
+      "$CI_PROJECT_DIR"/gitlab-ci/src/artifacts/rclone_download.py --remote-path=guest-os --out=guestos --git-rev="${VERSION}"
+      "$CI_PROJECT_DIR"/gitlab-ci/src/artifacts/rclone_download.py --remote-path=host-os --out=hostos --git-rev="${VERSION}"
+
+      BUILD_OUT="ic-os/setupos/build-out"
+      UPLOAD_TARGET="setup-os"
+
+      ic-os/setupos/scripts/build-iso.sh \
+        --guest-os=./guestos/disk-img/disk-img.tar.gz \
+        --host-os=./hostos/disk-img/host-disk-img.tar.gz \
+        --output="$BUILD_OUT"
+
+      "$CI_PROJECT_DIR"/gitlab-ci/src/artifacts/openssl-sign.sh "$BUILD_OUT"
+
+      buildevents cmd "$ROOT_PIPELINE_ID" "$CI_JOB_ID" rclone -- \
+      "${CI_PROJECT_DIR}"/gitlab-ci/src/artifacts/rclone_upload.py --version="${VERSION}" "$BUILD_OUT" "$UPLOAD_TARGET"

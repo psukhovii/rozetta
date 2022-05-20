@@ -1,0 +1,8 @@
+.idea
+
+ic-master
+deploy
+.github
+.gitignore
+*.Dockerfile
+task-definition*.json

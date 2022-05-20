@@ -1,0 +1,11 @@
+include:
+- local: /gitlab-ci/config/00--child-pipeline-root.yml
+
+.ubuntu-nix-docker-protected:
+  image:
+    # Use the docker image without nix-shell
+    name: "registry.gitlab.com/dfinity-lab/core/docker/ic-build:2022-05-18-de22ae277-f8f79c70919036eca7679e3160aa5af3b2ed63da"
+  extends:
+    - .ubuntu-nix-docker
+  tags:
+    - dfinity-launch

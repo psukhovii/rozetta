@@ -1,0 +1,42 @@
+docker-build-ic:
+  extends:
+    - .ubuntu-nix-docker-pinned-dc
+    - .rules-parent-pipeline
+  needs: []
+  stage: test
+  script:
+    - |
+      set -euo pipefail
+
+      # run docker-build-ic
+      gitlab-ci/tools/docker-build-ic
+
+      # generate SHA256SUMS files
+      cd artifacts/docker-build-ic/release
+      GLOBIGNORE="SHA256SUMS"
+      echo "Binaries SHA256SUMS"
+      # shellcheck disable=SC2035
+      sha256sum -b *.gz | tee SHA256SUMS
+      cd ../canisters
+      echo "Canisters SHA256SUMS"
+      # shellcheck disable=SC2035
+      sha256sum -b *.gz | tee SHA256SUMS
+      cd ../icos
+      echo "IC-OS SHA256SUMS"
+      # shellcheck disable=SC2035
+      sha256sum -b *.gz | tee SHA256SUMS
+      cd ../../..
+
+      VERSION=$(git rev-parse HEAD)
+      # release binaries
+      buildevents cmd "${ROOT_PIPELINE_ID}" "${CI_JOB_ID}" rclone -- \
+          gitlab-ci/src/artifacts/rclone_upload.py --version="${VERSION}" \
+          "artifacts/docker-build-ic/release" docker-build-ic/release
+      # canister binaries
+      buildevents cmd "${ROOT_PIPELINE_ID}" "${CI_JOB_ID}" rclone -- \
+          gitlab-ci/src/artifacts/rclone_upload.py --version="${VERSION}" \
+          "artifacts/docker-build-ic/canisters" docker-build-ic/canisters
+      # ic-os update img
+      buildevents cmd "${ROOT_PIPELINE_ID}" "${CI_JOB_ID}" rclone -- \
+          gitlab-ci/src/artifacts/rclone_upload.py --version="${VERSION}" \
+          "artifacts/docker-build-ic/icos" docker-build-ic/guest-os/update-img

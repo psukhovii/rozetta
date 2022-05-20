@@ -1,0 +1,2 @@
+*�	0��S�e)�`�jm�n���7a���)Rm�Z��Liׂ���P�`"�
+��xGroth20WithPop_Bls12_381�gpop_keyX0�'�{��:����1B��J�Х���K�.�-]�ZI�~��.�UA�OichallengeX #��7㭓�k!KU��Mr��7���[]m����hresponseX n��fpE�ߌ͝���2x�� H$;���W/

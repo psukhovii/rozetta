@@ -16,6 +16,14 @@
                 {
                     "name": "LOG_LEVEL",
                     "value": "DEBUG"
+                },
+                {
+                    "name": "LEDGER_CANISTER_ID",
+                    "value": "qswkt-jqaaa-aaaak-qaj3a-cai"
+                },
+                {
+                    "name": "TOKEN",
+                    "value": "OGYt"
                 }
             ],
             "mountPoints": [],
