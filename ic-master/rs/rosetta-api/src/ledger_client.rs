@@ -365,13 +365,20 @@ impl LedgerAccess for LedgerClient {
                 let block = raw_block.decode().map_err(|err| {
                     ApiError::internal_error(format!("Cannot decode block: {}", err))
                 })?;
-                if block.parent_hash != last_block_hash && i != 0 {
-                    let err_msg = format!(
-                        "Block at {}: parent hash mismatch. Expected: {:?}, got: {:?}",
-                        i, last_block_hash, block.parent_hash
-                    );
-                    error!("{}", err_msg);
-                    return Err(ApiError::internal_error(err_msg));
+                if i==0 {
+                    debug!("Sync First Block at {}", i);
+                    debug!("Block data: {:?}", block);
+                }
+                if i != 0 {
+                    debug!("Sync Block at {}", i);
+                    if block.parent_hash != last_block_hash {
+                        let err_msg = format!(
+                            "Block at {}: parent hash mismatch. Expected: {:?}, got: {:?}",
+                            i, last_block_hash, block.parent_hash
+                        );
+                        error!("{}", err_msg);
+                        return Err(ApiError::internal_error(err_msg));
+                    }
                 }
                 let hb = HashedBlock::hash_block(raw_block, last_block_hash, i);
                 if i == chain_length - 1 {
