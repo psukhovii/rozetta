@@ -152,7 +152,7 @@ impl RosettaApiHandle {
     /// Returns the identifier of the ICP network.
     pub fn network_id(&self) -> NetworkIdentifier {
         let net_id = hex::encode(self.ledger_can_id.get().as_slice());
-        NetworkIdentifier::new("Internet Computer".to_string(), net_id)
+        NetworkIdentifier::new("ORIGYN Foundation".to_string(), net_id)
     }
 
     /// Returns the account address shared by all neuron subaccounts.
