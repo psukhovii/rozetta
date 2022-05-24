@@ -47,7 +47,7 @@ impl RosettaRequestHandler {
     pub fn network_id(&self) -> NetworkIdentifier {
         let canister_id = self.ledger.ledger_canister_id();
         let net_id = hex::encode(canister_id.get().into_vec());
-        NetworkIdentifier::new("Internet Computer".to_string(), net_id)
+        NetworkIdentifier::new("ORIGYN Foundation".to_string(), net_id)
     }
 
     /// Get an Account Balance

@@ -350,9 +350,11 @@ impl LedgerAccess for LedgerClient {
             }
 
             debug!("Asking for blocks {}-{}", i, chain_length);
+            info!("Asking for blocks {}-{}", i, chain_length);
             let batch = canister.multi_query_blocks(i, chain_length).await?;
 
             debug!("Got batch of len: {}", batch.len());
+            info!("Got batch of len: {}", batch.len());
             if batch.is_empty() {
                 return Err(ApiError::internal_error(
                     "Couldn't fetch new blocks (batch result empty)".to_string(),
@@ -361,25 +363,37 @@ impl LedgerAccess for LedgerClient {
 
             let mut hashed_batch = Vec::new();
             hashed_batch.reserve_exact(batch.len());
+            info!("Last Verified Block Index: {:?}", blockchain.last()?.unwrap().index);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+
+            info!("Fetched Blocks length: {:?}", batch.len());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+            info!("First Block data: {:?}", batch.first().cloned().unwrap().decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+            info!("Second Block data: {:?}", &batch[1].decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+            info!("Third Block data: {:?}", &batch[2].decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+            info!("Fourth Block data: {:?}", &batch[3].decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+            info!("Fifth Block data: {:?}", &batch[4].decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+            info!("LAST Block data: {:?}", batch.last().cloned().unwrap().decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
             for raw_block in batch {
                 let block = raw_block.decode().map_err(|err| {
                     ApiError::internal_error(format!("Cannot decode block: {}", err))
                 })?;
-                if i==0 {
-                    debug!("Sync First Block at {}", i);
-                    debug!("Block data: {:?}", block);
+
+                debug!("Block data: {:?}", block);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+                trace!("Block data: {:?}", block);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+                info!("First Block data: {:?}", block);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+
+                debug!("Sync Block at {}", i);  // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+                trace!("Sync Block at {}", i);  // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+                info!("Sync Block at {}", i);  // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+
+                if block.parent_hash != last_block_hash {
+                    let err_msg = format!(
+                        "Block at {}: parent hash mismatch. Expected: {:?}, got: {:?}", // <---  SHOWED IN LOGS
+                        i, last_block_hash, block.parent_hash
+                    );
+                    error!("{}", err_msg);
+                    return Err(ApiError::internal_error(err_msg));
                 }
-                if i != 0 {
-                    debug!("Sync Block at {}", i);
-                    if block.parent_hash != last_block_hash {
-                        let err_msg = format!(
-                            "Block at {}: parent hash mismatch. Expected: {:?}, got: {:?}",
-                            i, last_block_hash, block.parent_hash
-                        );
-                        error!("{}", err_msg);
-                        return Err(ApiError::internal_error(err_msg));
-                    }
-                }
+
                 let hb = HashedBlock::hash_block(raw_block, last_block_hash, i);
                 if i == chain_length - 1 {
                     verify_block_hash(&certification, hb.hash, &self.root_key, &self.canister_id)
