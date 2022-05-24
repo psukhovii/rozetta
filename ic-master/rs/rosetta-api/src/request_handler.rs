@@ -630,7 +630,7 @@ fn verify_network_id(canister_id: &CanisterId, net_id: &NetworkIdentifier) -> Re
 
 fn verify_network_blockchain(net_id: &NetworkIdentifier) -> Result<(), ApiError> {
     match net_id.blockchain.as_str() {
-        "Internet Computer" => Ok(()),
+        "ORIGYN Foundation" => Ok(()),
         _ => Err(ApiError::InvalidNetworkId(
             false,
             "unknown blockchain".into(),
