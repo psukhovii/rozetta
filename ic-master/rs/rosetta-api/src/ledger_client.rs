@@ -363,7 +363,7 @@ impl LedgerAccess for LedgerClient {
 
             let mut hashed_batch = Vec::new();
             hashed_batch.reserve_exact(batch.len());
-            info!("Last Verified Block Index: {:?}", blockchain.last()?.unwrap().index);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+            // info!("Last Verified Block Index: {:?}", blockchain.last()?.unwrap().index);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
 
             info!("Fetched Blocks length: {:?}", batch.len());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
             info!("First Block data: {:?}", batch.first().cloned().unwrap().decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
