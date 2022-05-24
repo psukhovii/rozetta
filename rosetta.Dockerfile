@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM ubuntu:21.04
 
 WORKDIR /root
 COPY /scripts/ic-rosetta-api /usr/local/bin/
