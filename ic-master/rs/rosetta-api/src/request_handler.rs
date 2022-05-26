@@ -18,6 +18,7 @@ use ledger_canister::BlockHeight;
 use std::convert::{TryFrom, TryInto};
 use std::sync::Arc;
 use strum::IntoEnumIterator;
+use log::{info};
 
 use crate::convert::{from_model_account_identifier, neuron_account_from_public_key};
 use crate::errors::ApiError;
@@ -629,6 +630,7 @@ fn verify_network_id(canister_id: &CanisterId, net_id: &NetworkIdentifier) -> Re
 }
 
 fn verify_network_blockchain(net_id: &NetworkIdentifier) -> Result<(), ApiError> {
+    info!("verify_network_blockchain::CURRENT_BLOCKCHAIN: {:?}", net_id.blockchain.as_str());
     match net_id.blockchain.as_str() {
         "ORIGYN Foundation" => Ok(()),
         _ => Err(ApiError::InvalidNetworkId(
