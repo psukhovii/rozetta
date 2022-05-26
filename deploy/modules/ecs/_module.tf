@@ -25,6 +25,12 @@ resource "aws_ecs_task_definition" "main" {
       containerPort = var.container_port
       hostPort      = var.container_port
     }]
+    mountPoints = var.environment != "dev" ? [
+      {
+        sourceVolume  = "rosettaEfsVol",
+        containerPath = "/root/data",
+        readOnly : false
+    }] : null
     logConfiguration = {
       logDriver = "awslogs"
       options = {
@@ -34,6 +40,19 @@ resource "aws_ecs_task_definition" "main" {
       }
     }
   }])
+  dynamic "volume" {
+    for_each = var.environment != "dev" ? [""] : []
+    content {
+      name = "rosettaEfsVol"
+      efs_volume_configuration {
+        file_system_id = data.aws_efs_file_system.efs[0].id
+        transit_encryption = "ENABLED"
+        authorization_config {
+          iam = "DISABLED"
+        }
+      }
+    }
+  }
 
   tags = merge({ Name = var.ecs_task_definition_name }, var.tags)
 }
@@ -57,7 +76,7 @@ resource "aws_ecs_service" "main" {
   health_check_grace_period_seconds  = 60
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
-  platform_version                   = "1.3.0"
+  platform_version                   = "1.4.0"
 
   network_configuration {
     security_groups  = [var.security_group_ids]

@@ -14,5 +14,7 @@ module "ecs" {
   container_cpu            = var.container_cpu
   container_memory         = var.container_memory
   container_port           = var.container_port
+  efs_name                 = local.efs_name
+  environment              = var.environment
   tags                     = {}
 }

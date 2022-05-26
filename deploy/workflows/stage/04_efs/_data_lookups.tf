@@ -17,16 +17,12 @@ data "aws_subnets" "private_subnets" {
   }
 }
 
-data "aws_lb_target_group" "alb_tg_group" {
-  name = local.alb_tg_name
-}
-
-data "aws_security_group" "ecs" {
+data "aws_security_group" "efs" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.selected_vpc.id]
   }
   tags = {
-    Name = local.ecs_sg_name
+    Name = local.efs_sg_name
   }
 }

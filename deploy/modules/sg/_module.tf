@@ -11,6 +11,13 @@ resource "aws_security_group" "ecs_tasks" {
 
   tags = merge({ Name = var.ecs_task_sg_name }, var.tags)
 }
+resource "aws_security_group" "efs" {
+  count  = var.environment != "dev" ? 1 : 0
+  name   = var.efs_sg_name
+  vpc_id = var.vpc_id
+
+  tags = merge({ Name = var.efs_sg_name }, var.tags)
+}
 resource "aws_security_group_rule" "lb_rules" {
   count = length(var.lb_sg_rules)
 
@@ -50,4 +57,31 @@ resource "aws_security_group_rule" "ecs_rule1" {
   source_security_group_id = aws_security_group.alb.id
   to_port                  = var.container_port
   type                     = "ingress"
+}
+resource "aws_security_group_rule" "ecs_rule2" {
+  count                    = var.environment != "dev" ? 1 : 0
+  from_port                = 2049
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.ecs_tasks.id
+  source_security_group_id = aws_security_group.efs[0].id
+  to_port                  = 2049
+  type                     = "egress"
+}
+resource "aws_security_group_rule" "efs_rule1" {
+  count                    = var.environment != "dev" ? 1 : 0
+  from_port                = 2049
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.efs[0].id
+  source_security_group_id = aws_security_group.ecs_tasks.id
+  to_port                  = 2049
+  type                     = "ingress"
+}
+resource "aws_security_group_rule" "efs_rule2" {
+  count                    = var.environment != "dev" ? 1 : 0
+  from_port                = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.efs[0].id
+  source_security_group_id = aws_security_group.ecs_tasks.id
+  to_port                  = 0
+  type                     = "egress"
 }

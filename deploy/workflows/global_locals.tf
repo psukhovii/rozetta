@@ -11,4 +11,6 @@ locals {
   ecs_execution_role_name  = "${local.name_prefix}-ecsTaskExecutionRole-${var.environment}"
   ecs_task_role_name       = "${local.name_prefix}-ecsTaskRole-${var.environment}"
   ecs_sg_name              = "${local.name_prefix}-ecs-sg-${local.environment_short_name}"
+  efs_name                 = "${local.name_prefix}-${var.environment}"
+  efs_sg_name              = "${local.name_prefix}-efs-sg-${local.environment_short_name}"
 }
