@@ -22,6 +22,10 @@
                     "value": "zcpc2-4qaaa-aaaaj-qaula-cai"
                 },
                 {
+                    "name": "IC_URL",
+                    "value": "https://mainnet.dfinity.network"
+                },
+                {
                     "name": "TOKEN",
                     "value": "OGYt"
                 }
