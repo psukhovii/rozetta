@@ -56,7 +56,7 @@
         {
             "name": "rosettaEfsVol",
             "efsVolumeConfiguration": {
-                "fileSystemId": "fs-0c39fd2f41d2d1fe6",
+                "fileSystemId": "fs-0e6bad50b99a65ecc",
                 "rootDirectory": "/",
                 "transitEncryption": "ENABLED",
                 "authorizationConfig": {
