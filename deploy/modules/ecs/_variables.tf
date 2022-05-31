@@ -16,3 +16,25 @@ variable "service_desired_count" {}
 variable "alb_tg_group_arn" {}
 variable "environment" {}
 variable "tags" {}
+variable "enable_autoScaling" {
+  default = false
+}
+variable "scale_target_max_capacity" {
+  default     = 5
+}
+variable "scale_target_min_capacity" {
+  default     = 1
+}
+variable "max_cpu_threshold" {
+  default     = "85"
+}
+variable "min_cpu_threshold" {
+  default     = "10"
+}
+
+variable "max_cpu_evaluation_period" {
+  default     = "3"
+}
+variable "min_cpu_evaluation_period" {
+  default     = "3"
+}

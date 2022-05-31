@@ -16,5 +16,9 @@ module "ecs" {
   container_port           = var.container_port
   efs_name                 = local.efs_name
   environment              = var.environment
+  enable_autoScaling        = var.enable_autoScaling
+  scale_target_max_capacity = var.scale_target_max_capacity
+  scale_target_min_capacity = var.scale_target_min_capacity
+  max_cpu_threshold         = var.max_cpu_threshold
   tags                     = {}
 }
