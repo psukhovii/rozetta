@@ -30,13 +30,6 @@
                     "value": "OGY"
                 }
             ],
-            "mountPoints": [
-                {
-                    "sourceVolume": "rosettaEfsVol",
-                    "containerPath": "/root/data",
-                    "readOnly": false
-                }
-            ],
             "volumesFrom": [],
             "logConfiguration": {
                 "logDriver": "awslogs",
@@ -52,19 +45,6 @@
     "taskRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskRole-prod",
     "executionRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskExecutionRole-prod",
     "networkMode": "awsvpc",
-    "volumes": [
-        {
-            "name": "rosettaEfsVol",
-            "efsVolumeConfiguration": {
-                "fileSystemId": "fs-0e6bad50b99a65ecc",
-                "rootDirectory": "/",
-                "transitEncryption": "ENABLED",
-                "authorizationConfig": {
-                    "iam": "DISABLED"
-                }
-            }
-        }
-    ],
     "placementConstraints": [],
     "requiresCompatibilities": [
         "FARGATE"

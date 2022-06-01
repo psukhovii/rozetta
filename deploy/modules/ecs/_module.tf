@@ -14,7 +14,7 @@ resource "aws_ecs_task_definition" "main" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
     name      = var.ecr_name
-    image     = "${data.aws_ecr_repository.service.repository_url}:latest"
+    image     = "${data.aws_ecr_repository.service.repository_url}:c1eb8dc36d6e59c7884387f24aa2e597a228e764"
     essential = true
     environment = [
       { name = "LOG_LEVEL",
@@ -25,12 +25,6 @@ resource "aws_ecs_task_definition" "main" {
       containerPort = var.container_port
       hostPort      = var.container_port
     }]
-    mountPoints = var.environment != "dev" ? [
-      {
-        sourceVolume  = "rosettaEfsVol",
-        containerPath = "/root/data",
-        readOnly : false
-    }] : null
     logConfiguration = {
       logDriver = "awslogs"
       options = {
@@ -40,20 +34,6 @@ resource "aws_ecs_task_definition" "main" {
       }
     }
   }])
-  dynamic "volume" {
-    for_each = var.environment != "dev" ? [""] : []
-    content {
-      name = "rosettaEfsVol"
-      efs_volume_configuration {
-        file_system_id     = data.aws_efs_file_system.efs[0].id
-        transit_encryption = "ENABLED"
-        authorization_config {
-          iam = "DISABLED"
-        }
-      }
-    }
-  }
-
   tags = merge({ Name = var.ecs_task_definition_name }, var.tags)
 }
 
@@ -71,8 +51,8 @@ resource "aws_ecs_service" "main" {
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.main.arn
   desired_count                      = var.service_desired_count
-  deployment_minimum_healthy_percent = 50
-  deployment_maximum_percent         = 200
+  deployment_minimum_healthy_percent = 0
+  deployment_maximum_percent         = 100
   health_check_grace_period_seconds  = 60
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
