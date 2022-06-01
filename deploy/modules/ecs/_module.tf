@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "main" {
     content {
       name = "rosettaEfsVol"
       efs_volume_configuration {
-        file_system_id = data.aws_efs_file_system.efs[0].id
+        file_system_id     = data.aws_efs_file_system.efs[0].id
         transit_encryption = "ENABLED"
         authorization_config {
           iam = "DISABLED"
@@ -62,7 +62,7 @@ resource "aws_ecs_cluster" "main" {
   tags = merge({ Name = var.ecs_cluster_name }, var.tags)
   setting {
     name  = "containerInsights"
-    value = "disabled"
+    value = var.enable_containerInsights
   }
 }
 

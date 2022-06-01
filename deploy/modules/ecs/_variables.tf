@@ -20,21 +20,24 @@ variable "enable_autoScaling" {
   default = false
 }
 variable "scale_target_max_capacity" {
-  default     = 5
+  default = 5
 }
 variable "scale_target_min_capacity" {
-  default     = 1
+  default = 1
 }
 variable "max_cpu_threshold" {
-  default     = "85"
+  default = "60"
 }
 variable "min_cpu_threshold" {
-  default     = "10"
+  default = "10"
 }
 
 variable "max_cpu_evaluation_period" {
-  default     = "3"
+  default = "3"
 }
 variable "min_cpu_evaluation_period" {
-  default     = "3"
+  default = "3"
+}
+variable "enable_containerInsights" {
+  default = "disabled"
 }
