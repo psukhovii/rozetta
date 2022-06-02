@@ -367,10 +367,6 @@ impl LedgerAccess for LedgerClient {
 
             info!("Fetched Blocks length: {:?}", batch.len());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
             info!("First Block data: {:?}", batch.first().cloned().unwrap().decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
-            info!("Second Block data: {:?}", &batch[1].decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
-            info!("Third Block data: {:?}", &batch[2].decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
-            info!("Fourth Block data: {:?}", &batch[3].decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
-            info!("Fifth Block data: {:?}", &batch[4].decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
             info!("LAST Block data: {:?}", batch.last().cloned().unwrap().decode());   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
             for raw_block in batch {
                 let block = raw_block.decode().map_err(|err| {
@@ -379,7 +375,7 @@ impl LedgerAccess for LedgerClient {
 
                 debug!("Block data: {:?}", block);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
                 trace!("Block data: {:?}", block);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
-                info!("First Block data: {:?}", block);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
+                info!("Block data: {:?}", block);   // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
 
                 debug!("Sync Block at {}", i);  // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
                 trace!("Sync Block at {}", i);  // <---  NOT SHOWED IN LOGS BUT MUST BE!!!
