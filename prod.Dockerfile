@@ -1,6 +1,6 @@
 ARG ECR_REGISTRY
 FROM $ECR_REGISTRY/dfinity-rosetta-api
-
+RUN sed -i -e 's|disco|focal|g' /etc/apt/sources.list
 RUN apt update
 RUN apt install nginx -y
 
