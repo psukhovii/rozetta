@@ -32,7 +32,7 @@ resource "aws_alb_target_group" "main" {
     healthy_threshold   = "5"
     interval            = "30"
     protocol            = "HTTP"
-    matcher             = "404"
+    matcher             = var.matcher
     timeout             = "5"
     path                = var.health_check_path
     unhealthy_threshold = "2"

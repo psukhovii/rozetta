@@ -9,4 +9,7 @@ variable "tsl_certificate_arn" {}
 variable "kms_name" {}
 variable "waf_enable" {}
 variable "waf_web_acl_name" {}
+variable "matcher" {
+  default = "404"
+}
 variable "tags" {}

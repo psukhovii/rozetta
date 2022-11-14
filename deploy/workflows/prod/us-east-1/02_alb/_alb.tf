@@ -12,5 +12,6 @@ module "alb" {
   kms_name            = local.kms_name
   waf_enable          = var.waf_enable
   waf_web_acl_name    = var.waf_web_acl_name
+  matcher             = "200"
   tags                = local.common_tags
 }
