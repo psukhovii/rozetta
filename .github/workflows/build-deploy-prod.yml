@@ -15,6 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+## deploy to us-east-1 region
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -27,7 +28,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push image to Amazon ECR
-        id: build-image
+        id: build-image-us-east-1
         run: |
           docker build --build-arg ECR_REGISTRY=$ECR_REGISTRY -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f prod.Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY --all-tags
@@ -37,20 +38,18 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           ECR_REPOSITORY: tf-rosetta-api-prod
 
-      ## deploy to us-east-1 region
-
       - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
+        id: task-def-us-east-1
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition_prod_us-east-1.json
           container-name: tf-rosetta-api-prod
-          image: ${{ steps.build-image.outputs.image }}
+          image: ${{ steps.build-image-us-east-1.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: ${{ steps.task-def-us-east-1.outputs.task-definition }}
           service: tf-rosetta-api-ecs-service-prod
           cluster: tf-rosetta-api-prod
           wait-for-service-stability: true
@@ -69,7 +68,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push image to Amazon ECR
-        id: build-image
+        id: build-image-eu-west-1
         run: |
           docker build --build-arg ECR_REGISTRY=$ECR_REGISTRY -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f prod.Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY --all-tags
@@ -80,17 +79,17 @@ jobs:
           ECR_REPOSITORY: tf-rosetta-api-prod
 
       - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
+        id: task-def-eu-west-1
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition_prod_eu-west-1.json
           container-name: tf-rosetta-api-prod
-          image: ${{ steps.build-image.outputs.image }}
+          image: ${{ steps.build-image-eu-west-1.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: ${{ steps.task-def-eu-west-1.outputs.task-definition }}
           service: tf-rosetta-api-ecs-service-prod
           cluster: tf-rosetta-api-prod
           wait-for-service-stability: true
