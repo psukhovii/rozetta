@@ -42,8 +42,8 @@
         }
     ],
     "family": "tf-rosetta-api-task-stage",
-    "taskRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskRole-stage",
-    "executionRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskExecutionRole-stage",
+    "taskRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskRole-stage-us-east-1",
+    "executionRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskExecutionRole-stage-us-east-1",
     "networkMode": "awsvpc",
     "placementConstraints": [],
     "requiresCompatibilities": [

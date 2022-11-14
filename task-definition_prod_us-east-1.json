@@ -1,0 +1,54 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "tf-rosetta-api-prod",
+            "image": "957998967403.dkr.ecr.us-east-1.amazonaws.com/tf-rosetta-api-prod:latest",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "LOG_LEVEL",
+                    "value": "DEBUG"
+                },
+                {
+                    "name": "LEDGER_CANISTER_ID",
+                    "value": "jwcfb-hyaaa-aaaaj-aac4q-cai"
+                },
+                {
+                    "name": "IC_URL",
+                    "value": "https://boundary.ic0.app"
+                },
+                {
+                    "name": "TOKEN",
+                    "value": "OGY"
+                }
+            ],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/tf-rosetta-api-task-prod",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "family": "tf-rosetta-api-task-prod",
+    "taskRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskRole-prod-us-east-1",
+    "executionRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskExecutionRole-prod-us-east-1",
+    "networkMode": "awsvpc",
+    "placementConstraints": [],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "2048"
+}

@@ -13,17 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -35,14 +24,48 @@ jobs:
         with:
           working-directory: ic-master/rs
 
+## push to us-east-1 region
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-east-1"
+
+      - name: Login to Amazon ECR
+        id: login-ecr-us-east-1
+        uses: aws-actions/amazon-ecr-login@v1
+
       - name: Build, tag, and push image to Amazon ECR
-        id: build-image
         run: |
           ./scripts/build_rosetta.sh
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f rosetta.Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY --all-tags
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ steps.login-ecr-us-east-1.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REPOSITORY: dfinity-rosetta-api
+
+      ## push to us-east-1 region
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "eu-west-1"
+
+      - name: Login to Amazon ECR
+        id: login-ecr-eu-west-1
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        run: |
+          ./scripts/build_rosetta.sh
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f rosetta.Dockerfile .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY --all-tags
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr-eu-west-1.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
           ECR_REPOSITORY: dfinity-rosetta-api

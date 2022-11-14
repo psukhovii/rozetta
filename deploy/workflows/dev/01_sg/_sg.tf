@@ -7,6 +7,6 @@ module "sg" {
   lb_sg_rules      = var.lb_sg_rules != [] ? var.lb_sg_rules : local.lb_default_sg_rules
   ecs_sg_rules     = var.ecs_sg_rules != [] ? var.ecs_sg_rules : local.ecs_default_sg_rules
   environment      = var.environment
-  tags             = {}
+  tags             = local.common_tags
 }
 

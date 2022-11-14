@@ -9,5 +9,8 @@ module "alb" {
   security_group_ids  = data.aws_security_group.alb.id
   vpc_id              = data.aws_vpc.selected_vpc.id
   tsl_certificate_arn = var.tsl_certificate_arn
-  tags                = {}
+  kms_name            = local.kms_name
+  waf_enable          = var.waf_enable
+  waf_web_acl_name    = var.waf_web_acl_name
+  tags                = local.common_tags
 }

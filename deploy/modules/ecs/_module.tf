@@ -1,7 +1,8 @@
 resource "aws_cloudwatch_log_group" "main" {
-  name = "/ecs/${var.ecs_task_definition_name}"
-
-  tags = merge({ Name = var.ecs_task_definition_name }, var.tags)
+  name              = "/ecs/${var.ecs_task_definition_name}"
+  retention_in_days = 90
+  kms_key_id        = data.aws_kms_key.key.arn
+  tags              = merge({ Name = var.ecs_task_definition_name }, var.tags)
 }
 
 resource "aws_ecs_task_definition" "main" {
@@ -13,13 +14,10 @@ resource "aws_ecs_task_definition" "main" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
-    name      = var.ecr_name
-    image     = "${data.aws_ecr_repository.service.repository_url}:c1eb8dc36d6e59c7884387f24aa2e597a228e764"
-    essential = true
-    environment = [
-      { name = "LOG_LEVEL",
-      value = "DEBUG" }
-    ]
+    name        = var.ecr_name
+    image       = "${data.aws_ecr_repository.service.repository_url}:latest"
+    essential   = true
+    environment = var.task_def_environment
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
@@ -51,8 +49,8 @@ resource "aws_ecs_service" "main" {
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.main.arn
   desired_count                      = var.service_desired_count
-  deployment_minimum_healthy_percent = 0
-  deployment_maximum_percent         = 100
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
   health_check_grace_period_seconds  = 60
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
@@ -72,4 +70,5 @@ resource "aws_ecs_service" "main" {
   lifecycle {
     ignore_changes = [task_definition, desired_count]
   }
+  tags = merge({ Name = var.ecs_service_name }, var.tags)
 }

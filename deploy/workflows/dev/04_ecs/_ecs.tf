@@ -15,5 +15,7 @@ module "ecs" {
   container_memory         = var.container_memory
   container_port           = var.container_port
   environment              = var.environment
-  tags                     = {}
+  task_def_environment     = local.task_def_environment
+  kms_name                 = local.kms_name
+  tags                     = local.common_tags
 }

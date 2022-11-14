@@ -1,6 +1,7 @@
 resource "aws_efs_file_system" "efs" {
   encrypted      = true
   creation_token = var.efs_name
+  kms_key_id     = data.aws_kms_key.key.arn
   lifecycle_policy {
     transition_to_ia = "AFTER_30_DAYS"
   }

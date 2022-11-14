@@ -12,6 +12,9 @@ variable "ecr_name" {}
 variable "container_port" {}
 variable "container_cpu" {}
 variable "container_memory" {}
+variable "container_image" {
+  default = ""
+}
 variable "service_desired_count" {}
 variable "alb_tg_group_arn" {}
 variable "environment" {}
@@ -39,5 +42,7 @@ variable "min_cpu_evaluation_period" {
   default = "3"
 }
 variable "enable_containerInsights" {
-  default = "disabled"
+  default = "enabled"
 }
+variable "kms_name" {}
+variable "task_def_environment" {}

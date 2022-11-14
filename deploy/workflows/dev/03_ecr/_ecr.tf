@@ -1,5 +1,6 @@
 module "ecr" {
   source   = "../../../modules/ecr"
   ecr_name = local.ecr_name
-  tags     = {}
+  kms_name = local.kms_name
+  tags     = local.common_tags
 }

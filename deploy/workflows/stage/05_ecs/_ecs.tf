@@ -19,5 +19,7 @@ module "ecs" {
   enable_autoScaling        = var.enable_autoScaling
   scale_target_max_capacity = var.scale_target_max_capacity
   scale_target_min_capacity = var.scale_target_min_capacity
-  tags                      = {}
+  task_def_environment      = local.task_def_environment
+  kms_name                  = local.kms_name
+  tags                      = local.common_tags
 }

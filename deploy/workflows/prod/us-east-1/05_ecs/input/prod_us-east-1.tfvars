@@ -1,0 +1,10 @@
+environment               = "prod"
+application_name          = "rosetta-api"
+vps_name                  = "origyn-dev"
+container_port            = 8080
+container_cpu             = 4096
+container_memory          = 8192
+service_desired_count     = 1
+enable_autoScaling        = true
+scale_target_max_capacity = 10
+scale_target_min_capacity = 3

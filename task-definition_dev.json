@@ -43,8 +43,8 @@
         }
     ],
     "family": "tf-rosetta-api-task-dev",
-    "taskRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskRole-dev",
-    "executionRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskExecutionRole-dev",
+    "taskRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskRole-dev-us-east-1",
+    "executionRoleArn": "arn:aws:iam::957998967403:role/tf-rosetta-api-ecsTaskExecutionRole-dev-us-east-1",
     "networkMode": "awsvpc",
     "volumes": [],
     "placementConstraints": [],

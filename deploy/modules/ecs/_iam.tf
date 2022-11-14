@@ -1,6 +1,6 @@
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = var.ecs_execution_role_name
-
+  name               = "${var.ecs_execution_role_name}-${data.aws_region.current.name}"
+  tags               = merge({ Name = "${var.ecs_execution_role_name}-${data.aws_region.current.name}" }, var.tags)
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -19,8 +19,8 @@ EOF
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  name = var.ecs_task_role_name
-
+  name               = "${var.ecs_task_role_name}-${data.aws_region.current.name}"
+  tags               = merge({ Name = "${var.ecs_execution_role_name}-${data.aws_region.current.name}" }, var.tags)
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",

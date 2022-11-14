@@ -13,4 +13,12 @@ locals {
   ecs_sg_name              = "${local.name_prefix}-ecs-sg-${local.environment_short_name}"
   efs_name                 = "${local.name_prefix}-${var.environment}"
   efs_sg_name              = "${local.name_prefix}-efs-sg-${local.environment_short_name}"
+  kms_name                 = "${local.name_prefix}-kms-${local.environment_short_name}"
+  common_tags = {
+    "ogy:required:environment_name" = var.environment,
+    "ogy:required:infra_owner"      = "devops",
+    "ogy:required:product"          = var.application_name,
+    "ogy:required:repository_url"   = "https://github.com/ORIGYN-SA/rosetta-infra",
+    "ogy:required:provisioned_by"   = "terraform"
+  }
 }
